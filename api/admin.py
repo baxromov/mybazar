@@ -1,0 +1,52 @@
+from django.contrib import admin
+from . import models
+from mptt import admin as mptt_admin
+
+
+class AddressAdmin(admin.StackedInline):
+    model = models.Address
+
+
+@admin.register(models.Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    inlines = (AddressAdmin, )
+    exclude = (
+        'user_permissions',
+        'is_superuser',
+        'date_joined',
+        'is_active',
+        'is_staff',
+        'groups',
+    )
+    readonly_fields = [
+        'last_login',
+    ]
+
+
+@admin.register(models.Category)
+class CategoryAdmin(mptt_admin.DraggableMPTTAdmin):
+    prepopulated_fields = {'slug': ('name',)}
+
+
+class ProductGallery(admin.StackedInline):
+    model = models.ProductGallery
+
+
+@admin.register(models.Product)
+class ProductAdmin(admin.ModelAdmin):
+    inlines = [ProductGallery]
+    prepopulated_fields = {'slug': ('name',)}
+
+
+class CartItemAdmin(admin.StackedInline):
+    model = models.CartItem
+
+
+@admin.register(models.Cart)
+class CartAdmin(admin.ModelAdmin):
+    inlines = [CartItemAdmin, ]
+
+
+@admin.register(models.Banner)
+class BannerAdmin(admin.ModelAdmin):
+    pass
