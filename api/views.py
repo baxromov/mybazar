@@ -24,6 +24,20 @@ class ProductModelViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 
+class ProductGalleryModelViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.ProductGalleryModelSerializer
+    queryset = models.ProductGallery.objects.all()
+    permission_classes = (permissions.AllowAny, )
+    http_method_names = ['get']
+
+
+class BannerModelViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.BannerModelSerializer
+    queryset = models.Banner.objects.all()
+    permission_classes = (permissions.AllowAny, )
+    http_method_names = ['get']
+
+
 class CartModelViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.CartModelSerializer
     queryset = models.Cart.objects.all()

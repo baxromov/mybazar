@@ -7,11 +7,13 @@ from . import views
 schema_view = get_schema_view(title='Blog API')
 router = routers.DefaultRouter()
 
-router.register('address', views.AddressModelViewSet)
-router.register('category', views.CategoryModelViewSet)
+router.register('banner', views.BannerModelViewSet)
 router.register('product', views.ProductModelViewSet)
+router.register('product-gallery', views.ProductGalleryModelViewSet)
+router.register('category', views.CategoryModelViewSet)
 router.register('cart', views.CartModelViewSet)
 router.register('cart_item', views.CartItemModelViewSet)
+router.register('address', views.AddressModelViewSet)
 
 
 urlpatterns = [
