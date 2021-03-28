@@ -8,6 +8,7 @@ cryptography==3.4.6
 defusedxml==0.7.1
 Django==3.1.7
 django-allauth==0.44.0
+django-ckeditor==6.0.0
 django-cors-headers==3.7.0
 django-js-asset==1.2.2
 django-mptt==0.12.0
