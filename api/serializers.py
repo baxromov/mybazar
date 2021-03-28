@@ -2,6 +2,10 @@ from rest_framework import serializers
 
 from . import models
 
+from django.contrib.auth import get_user_model
+
+UserModel = get_user_model()
+
 
 class AddressHyperlinkedModelSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -19,14 +23,16 @@ class AddressHyperlinkedModelSerializer(serializers.HyperlinkedModelSerializer):
 class CustomerModelSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = models.Customer
-        fields = [
-            'phone_number',
-            'gender',
-            'username',
-        ]
-        read_only = [
-            'password'
+        model = UserModel
+        exclude = [
+            'last_login',
+            'is_staff',
+            'is_active',
+            'date_joined',
+            'groups',
+            'user_permissions',
+            'password',
+            'is_superuser',
         ]
 
 
@@ -40,6 +46,13 @@ class CategoryModelSerializer(serializers.ModelSerializer):
 
     def get_children(self, obj):
         return CategoryModelSerializer(obj.get_children(), many=True).data
+
+
+class ProductGalleryModelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.ProductGallery
+        fields = '__all__'
 
 
 class ProductModelSerializer(serializers.ModelSerializer):
@@ -58,7 +71,7 @@ class CartModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Cart
-        fields = ['id', 'customer', 'created_at']
+        fields = ['id', 'customer']
 
 
 class CartItemModelSerializer(serializers.ModelSerializer):

@@ -4,13 +4,6 @@ from . import models
 from . import serializers
 
 
-class CustomerModelViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.CustomerModelSerializer
-    queryset = models.Customer.objects.all()
-    permission_classes = (permissions.IsAuthenticated, )
-    http_method_names = ['get']
-
-
 class AddressModelViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.AddressHyperlinkedModelSerializer
     queryset = models.Address.objects.all()
@@ -34,10 +27,10 @@ class ProductModelViewSet(viewsets.ModelViewSet):
 class CartModelViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.CartModelSerializer
     queryset = models.Cart.objects.all()
-    permission_classes = (permissions.AllowAny, )
+    permission_classes = (permissions.IsAuthenticated, )
 
     def get_queryset(self):
-        query = models.Cart.objects.filter(customer=self.request.user)
+        query = self.queryset.filter(customer__id=self.request.user.id)
         return query
 
     def create(self, request, *args, **kwargs):

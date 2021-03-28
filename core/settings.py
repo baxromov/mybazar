@@ -95,7 +95,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 
@@ -143,6 +143,12 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    # 'USER_DETAILS_SERIALIZER': 'api.serializers.CustomerModelSerializer',
+
+}
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'api.serializers.CustomerModelSerializer'
 }
 
 INSTALLED_APPS += [
@@ -151,4 +157,17 @@ INSTALLED_APPS += [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
-ACCOUNT_AUTHENTICATION_METHOD = 'phone_number'
+
+#ckeditor
+
+INSTALLED_APPS += [
+    'ckeditor',
+]
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_FILENAME_GENERATOR = 'utils.get_filename'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+    },
+}

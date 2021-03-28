@@ -1,15 +1,11 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from mptt import models as mptt_models
+from ckeditor.fields import RichTextField
 
 GENDER = (
     ('male', 'MALE'),
     ('female', 'Female')
-)
-
-STATUS = (
-        ('active', 'Active'),
-        ('not_active', 'Not Active')
 )
 
 DISTRICT = (
@@ -67,8 +63,8 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(decimal_places=2, max_digits=10)
     image = models.ImageField(upload_to='product/%Y/%m/', blank=True, null=True)
-    category = models.ManyToManyField(to=Category)
-    description = models.TextField()
+    category = mptt_models.TreeForeignKey('Category', null=True, blank=True, on_delete=models.ForeignKey)
+    description = RichTextField()
     slug = models.SlugField(max_length=255)
     is_sale = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -88,9 +84,11 @@ class ProductGallery(models.Model):
 
 class Cart(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='carts')
-    status = models.CharField(choices=STATUS, max_length=12)
-    created_at = models.DateTimeField(auto_now_add=True)
+    total = models.DecimalField(null=True, default=0, max_digits=16, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    ordered_at = models.DateTimeField(null=True, blank=True)
     items = models.ManyToManyField(Product)
+    is_ordered = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.customer.username)
@@ -99,10 +97,12 @@ class Cart(models.Model):
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    quantity = models.PositiveIntegerField(default=1)
+    price = models.FloatField()
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
-    def __str__(self):
+
+def __str__(self):
         return str(self.cart.customer.username)
 
 
@@ -111,5 +111,3 @@ class Banner(models.Model):
 
     def __str__(self):
         return str(self.image)
-
-
