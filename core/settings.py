@@ -156,8 +156,6 @@ INSTALLED_APPS += [
     'corsheaders',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
-
 #ckeditor
 
 INSTALLED_APPS += [
@@ -171,3 +169,5 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'full',
     },
 }
+
+CORS_ALLOW_ALL_ORIGINS = True
