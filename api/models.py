@@ -55,6 +55,9 @@ class Category(mptt_models.MPTTModel):
                                         blank=True,
                                         related_name='children')
 
+    class Meta:
+        ordering = ('name',)
+
     def __str__(self):
         return str(self.name)
 
@@ -65,10 +68,16 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product/%Y/%m/', blank=True, null=True)
     category = mptt_models.TreeForeignKey('Category', null=True, blank=True, on_delete=models.ForeignKey)
     description = RichTextField()
+    rating = models.PositiveSmallIntegerField(default=0)
+    quantity = models.PositiveIntegerField(null=True, blank=True)
     slug = models.SlugField(max_length=255)
     is_sale = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('name',)
+        db_table = 'products'
 
     def __str__(self):
         return self.name
@@ -101,8 +110,7 @@ class CartItem(models.Model):
     price = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True, null=True)
 
-
-def __str__(self):
+    def __str__(self):
         return str(self.cart.customer.username)
 
 

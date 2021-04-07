@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 UserModel = get_user_model()
 
 
-class AddressHyperlinkedModelSerializer(serializers.HyperlinkedModelSerializer):
+class AddressHyperlinkedModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Address
@@ -67,7 +67,7 @@ class ProductModelSerializer(serializers.ModelSerializer):
 
 
 class CartModelSerializer(serializers.ModelSerializer):
-    customer = CustomerModelSerializer(read_only=True)
+    customer = CustomerModelSerializer(read_only=True, source='username')
 
     class Meta:
         model = models.Cart
@@ -78,7 +78,13 @@ class CartItemModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CartItem
-        fields = '__all__'
+        fields = [
+            'cart',
+            'product',
+            'quantity',
+            'price',
+            'created_at',
+        ]
 
 
 class BannerModelSerializer(serializers.ModelSerializer):
